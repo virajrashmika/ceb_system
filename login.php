@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['username']);
     $password = $_POST['password'];
 
-    $stmt = $conn->prepare("SELECT user_id, username, password, full_name, role FROM users WHERE username = ?");
+    $stmt = $conn->prepare("SELECT user_id, username, password, full_name, role, must_change_password FROM users WHERE username = ? AND is_deleted = 0");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $user = $stmt->get_result()->fetch_assoc();
@@ -25,6 +25,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['full_name']     = $user['full_name'];
         $_SESSION['role']          = $user['role'];
         $_SESSION['last_activity'] = time();
+
+        /* Read once, here, so no later page has to ask the database again.
+           If it is set, the home page they are about to land on draws the
+           box that asks them to replace the starting password. */
+        $_SESSION['must_change_password'] = (int)$user['must_change_password'];
 
         header("Location: index.php");
         exit;

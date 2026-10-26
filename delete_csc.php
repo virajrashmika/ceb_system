@@ -1,5 +1,6 @@
 <?php
 include 'auth.php';
+$needArea = 'csc';
 include 'require_staff.php';
 include 'db.php';
 

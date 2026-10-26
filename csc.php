@@ -38,7 +38,7 @@ include 'header.php';
                     FROM csc
                     LEFT JOIN areas     ON csc.area_id = areas.area_id
                     LEFT JOIN provinces ON areas.province_id = provinces.province_id
-                    LEFT JOIN transformers t ON t.csc_id = csc.csc_id AND t.is_deleted = 0
+                    LEFT JOIN transformers t ON t.csc_id = csc.csc_id AND " . txActiveSql('t') . "
                     WHERE csc.is_deleted = 0
                     GROUP BY csc.csc_id, csc.csc_name, csc.csc_code,
                              areas.area_name, provinces.province_name
@@ -72,5 +72,7 @@ include 'header.php';
         </table>
     </div>
 </div>
+
+<?php include 'csc_breakdown.php'; ?>
 
 <?php include 'footer.php'; ?>

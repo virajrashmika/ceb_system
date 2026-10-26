@@ -27,10 +27,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $message = "The two new passwords do not match.";
     } else {
         $hash = password_hash($new1, PASSWORD_DEFAULT);
-        $stmt = $conn->prepare("UPDATE users SET password = ? WHERE user_id = ?");
+        /* Clearing must_change_password here as well as in
+           change_password.php means it does not matter which of the two
+           forms a flagged account happens to use. */
+        $stmt = $conn->prepare("UPDATE users
+                                SET password = ?, must_change_password = 0
+                                WHERE user_id = ?");
         $stmt->bind_param("si", $hash, $uid);
         $stmt->execute();
         $stmt->close();
+
+        $_SESSION['must_change_password'] = 0;
 
         $message = "Password changed successfully.";
         $isError = false;

@@ -1,5 +1,6 @@
 <?php
 include 'auth.php';
+$needArea = 'csc';
 include 'require_staff.php';
 include 'require_admin.php';
 include 'db.php';
@@ -117,8 +118,7 @@ include 'header.php';
             <div class="form-row">
                 <label for="ccode">CSC Code <span class="req">*</span></label>
                 <input type="text" id="ccode" name="csc_code" maxlength="10">
-                <span class="field-hint">Three letters, e.g. UBP. Must be unique.</span>
-            </div>
+                </div>
 
             <div class="form-row">
                 <label for="area">Area <span class="req">*</span></label>
@@ -137,7 +137,6 @@ include 'header.php';
                     }
                     ?>
                 </select>
-                <span class="field-hint">The province is decided by the area you choose.</span>
             </div>
 
             <div class="form-actions">

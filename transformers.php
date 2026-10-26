@@ -3,7 +3,6 @@ include 'auth.php';
 include 'db.php';
 
 $pageTitle = "Transformers";
-$pageDesc  = "Transformers registered across Uva Province.";
 $activeNav = "transformers";
 include 'header.php';
 
@@ -66,24 +65,25 @@ $filterKva = isset($_GET['kva']) ? (int)$_GET['kva'] : 0;
         </form>
     </div>
 
+    <?php /* plain-table keeps the classic row layout. Without it section 20
+             turns every row into a stacked tile, which is right for the wide
+             event tables but wrong here: three short columns read better as
+             one line per transformer, the way the CSC register does. */ ?>
     <div class="table-wrap">
-        <table class="data">
+        <table class="data plain-table">
             <thead>
                 <tr>
                     <th>S/N</th>
                     <th>Substation Name</th>
-                    <th class="num">Capacity</th>
                     <th>Serial No</th>
-                    <th>CSC</th>
-                    <th>Area</th>
-                    <th>Details</th>
-                    <th class="num">Proposals</th>
+                    <th>Type</th>
+                    <th class="num">Capacity</th>
                 </tr>
             </thead>
             <tbody>
             <?php
             // Build the filter conditions and the values that go with them.
-            $where  = "WHERE t.is_deleted = 0";
+            $where  = "WHERE " . txActiveSql('t');
             $types  = "";
             $params = array();
 
@@ -99,15 +99,15 @@ $filterKva = isset($_GET['kva']) ? (int)$_GET['kva'] : 0;
                 $params[] = $filterKva;
             }
 
+            /* Only the three columns the register shows. The substation, CSC,
+               area, details and event count were dropped from the list — they
+               are all on the transformer's own page, one click away. Losing
+               the event count also loses a COUNT(*) run once per row, which
+               on 2,209 transformers was the slowest thing on the page. The
+               filters work off t.csc_id directly, so neither join is needed. */
             $sql = "SELECT t.transformer_id, t.transformer_code, t.substation_name,
-                           t.capacity_kva, t.serial_no, t.details,
-                           csc.csc_name, areas.area_name,
-                           (SELECT COUNT(*) FROM tasks x
-                             WHERE x.transformer_id = t.transformer_id
-                               AND x.is_deleted = 0) AS job_count
+                           t.serial_no, t.transformer_type, t.capacity_kva
                     FROM transformers t
-                    LEFT JOIN csc   ON t.csc_id = csc.csc_id
-                    LEFT JOIN areas ON csc.area_id = areas.area_id
                     $where
                     ORDER BY t.transformer_code";
 
@@ -117,7 +117,7 @@ $filterKva = isset($_GET['kva']) ? (int)$_GET['kva'] : 0;
             $result = $stmt->get_result();
 
             if ($result->num_rows == 0) {
-                echo "<tr><td colspan='8'><div class='table-empty'>No transformers match these filters.</div></td></tr>";
+                echo "<tr><td colspan='5'><div class='table-empty'>No transformers match these filters.</div></td></tr>";
             }
 
             while ($row = $result->fetch_assoc()) {
@@ -125,7 +125,12 @@ $filterKva = isset($_GET['kva']) ? (int)$_GET['kva'] : 0;
                 $id   = $row['transformer_id'];
                 $dash = "<span class='field-hint'>&mdash;</span>";
 
-                echo "<tr>";
+                /* The whole row opens the transformer, the same as a row in
+                   the event register. data-href is picked up by the handler
+                   in footer.php; the S/N below stays a real link, so the
+                   keyboard and "open in new tab" keep working and the row is
+                   not something only a mouse can press. */
+                echo "<tr data-href='transformer.php?id=$id'>";
 
                 echo "<td data-label='S/N' class='code-cell'><a href='transformer.php?id=$id'>"
                    . htmlspecialchars($row['transformer_code']) . "</a></td>";
@@ -134,21 +139,16 @@ $filterKva = isset($_GET['kva']) ? (int)$_GET['kva'] : 0;
                    . (trim((string)$row['substation_name']) !== ''
                       ? htmlspecialchars($row['substation_name']) : $dash) . "</td>";
 
-                echo "<td data-label='Capacity' class='num'>"
-                   . ($row['capacity_kva'] ? $row['capacity_kva'] . " kVA" : $dash) . "</td>";
-
                 echo "<td data-label='Serial No' class='code-cell'>"
                    . (trim((string)$row['serial_no']) !== ''
                       ? htmlspecialchars($row['serial_no']) : $dash) . "</td>";
 
-                echo "<td data-label='CSC'>" . htmlspecialchars($row['csc_name']) . "</td>";
-                echo "<td data-label='Area'>" . htmlspecialchars($row['area_name']) . "</td>";
+                echo "<td data-label='Type'>"
+                   . (trim((string)$row['transformer_type']) !== ''
+                      ? htmlspecialchars($row['transformer_type']) : $dash) . "</td>";
 
-                echo "<td data-label='Details'>"
-                   . (trim((string)$row['details']) !== ''
-                      ? htmlspecialchars($row['details']) : $dash) . "</td>";
-
-                echo "<td data-label='Proposals' class='num'>" . (int)$row['job_count'] . "</td>";
+                echo "<td data-label='Capacity' class='num'>"
+                   . ($row['capacity_kva'] ? $row['capacity_kva'] . " kVA" : $dash) . "</td>";
 
                 echo "</tr>";
             }

@@ -196,13 +196,44 @@ hr {
    4. Page heading area
    -------------------------------------------------------------------------- */
 
+/* The heading and its optional corner button sit side by side; everything
+   that was here before is stacked inside .page-head-main exactly as it was,
+   so a page that asks for no corner button looks unchanged. Wrapping is
+   what moves the button under the heading on a narrow screen. */
 .page-head {
     background: #ffffff;
     border-bottom: 1px solid #d5dae1;
     padding: 18px 32px;
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px 20px;
+}
+
+.page-head-main {
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
+    min-width: 0;
+    flex: 0 1 auto;
+}
+
+/* The corner group: this page's action, then the light/dark switch. */
+.page-head-side {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 2px;
+    justify-content: flex-end;
+    flex: 1 1 520px;
+    min-width: 0;
+}
+
+.page-head-side .back-link {
+    margin-top: 0;
 }
 
 .page-head h1 {
@@ -1363,13 +1394,24 @@ body {
     min-height: 100vh;
 }
 
+/* Dark mode is a deep neutral slate, not a colour.
+
+   It used to be built on #2a1030 — a plum — with magenta and crimson
+   washes over it. Colour that strong competes with the data: a red badge
+   has to shout over a red-ish page to be seen at all.
+
+   The base is now nearly black with a slight blue lean, and the three
+   washes are low-saturation teal and navy, dark enough to read as depth
+   rather than as colour. That leaves the badges, the status colours and
+   the capacity arrows as the only saturated things on screen, which is
+   where attention belongs. */
 [data-theme="dark"] body {
     background:
-        radial-gradient(55% 65% at 10% 45%, #6b3f8f 0%, rgba(107,63,143,0) 60%),
-        radial-gradient(55% 55% at 48% 92%, #a02244 0%, rgba(160,34,68,0) 65%),
-        radial-gradient(50% 70% at 96% 60%, #17407e 0%, rgba(23,64,126,0) 60%),
-        radial-gradient(50% 40% at 60%  5%, #0a0a12 0%, rgba(10,10,18,0) 70%),
-        #2a1030;
+        radial-gradient(60% 65% at 12% 40%, #0d3b44 0%, rgba(13,59,68,0) 62%),
+        radial-gradient(55% 55% at 50% 95%, #10243d 0%, rgba(16,36,61,0) 65%),
+        radial-gradient(52% 70% at 95% 55%, #122f56 0%, rgba(18,47,86,0) 60%),
+        radial-gradient(50% 45% at 65%  5%, #05080d 0%, rgba(5,8,13,0) 70%),
+        #080c12;
     background-attachment: fixed;
     color: #e8ecf4;
 }
@@ -1387,7 +1429,7 @@ body {
 }
 
 [data-theme="dark"] .sidebar {
-    background: rgba(18, 10, 28, 0.42);
+    background: rgba(10, 15, 22, 0.66);
     border-right-color: rgba(255, 255, 255, 0.10);
     box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.07);
 }
@@ -1428,34 +1470,17 @@ body {
     color: #80fdff !important;
 }
 
-/* --- theme toggle --- */
+/* --- theme toggle ---
+   It sits in the top right of the page heading and carries .back-link as
+   well, so the pill shape, both palettes and the hover all come from there
+   and the corner matches itself. Only the parts a <button> needs are set
+   here. */
 
 .theme-toggle {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: calc(100% - 24px);
-    margin: 10px 12px 4px;
-    padding: 9px 14px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.28);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.40);
-    color: #24354f;
+    gap: 8px;
     font-family: inherit;
-    font-size: 13px;
     cursor: pointer;
 }
-
-.theme-toggle:hover { background: rgba(255, 255, 255, 0.45); }
-
-[data-theme="dark"] .theme-toggle {
-    background: rgba(255, 255, 255, 0.09);
-    border-color: rgba(255, 255, 255, 0.14);
-    color: #cfdcea;
-}
-[data-theme="dark"] .theme-toggle:hover { background: rgba(255,255,255,.15); }
 
 .theme-icons { display: grid; place-items: center; }
 .theme-icons .icon-sun,
@@ -1475,7 +1500,7 @@ body {
 }
 
 [data-theme="dark"] .page-head {
-    background: rgba(18, 12, 28, 0.40);
+    background: rgba(10, 15, 22, 0.52);
     border-bottom-color: rgba(255,255,255,.09);
 }
 
@@ -1495,7 +1520,7 @@ body {
 }
 
 [data-theme="dark"] .panel {
-    background: rgba(20, 14, 32, 0.75);
+    background: rgba(13, 19, 28, 0.82);
     border-color: rgba(255, 255, 255, 0.10);
     box-shadow: 0 6px 24px rgba(0, 0, 0, .32);
 }
@@ -1515,7 +1540,7 @@ body {
 }
 
 [data-theme="dark"] .stat {
-    background: rgba(20, 14, 32, 0.72);
+    background: rgba(13, 19, 28, 0.80);
     border-color: rgba(255,255,255,.10);
     border-top-color: #7f9dd8;
 }
@@ -1528,7 +1553,7 @@ body {
 }
 
 [data-theme="dark"] .footer-bar {
-    background: rgba(18,12,28,.4);
+    background: rgba(10, 15, 22, 0.55);
     border-top-color: rgba(255,255,255,.09);
     color: #9fb0cc;
 }
@@ -1603,7 +1628,7 @@ select, textarea {
 [data-theme="dark"] input[type="email"],
 [data-theme="dark"] select,
 [data-theme="dark"] textarea {
-    background: rgba(10, 6, 18, 0.55);
+    background: rgba(5, 9, 14, 0.62);
     border-color: rgba(255,255,255,.18);
     color: #eef2f8;
 }
@@ -1900,12 +1925,6 @@ select, textarea {
     .page-head { padding: 14px 14px; }
     .sidebar-brand { padding: 16px 12px 14px 12px; }
     .sidebar-brand .brand-name { font-size: 17px; }
-    .theme-toggle {
-        width: calc(100% - 12px);
-        margin: 8px 6px 4px;
-        padding: 8px 10px;
-        font-size: 12px;
-    }
 }
 /* --- 2. Summary tiles shrink instead of pushing the page wider --- */
 
@@ -2128,7 +2147,7 @@ table.data:not(.plain-table):not(.detail-table) td:has(.table-empty)::before {
 
     [data-theme="dark"] body::before {
         background-image: url('images/bg-dark.jpg');
-        opacity: .09;
+        opacity: .05;
     }
 
     /* Keep the page above the image */
@@ -2150,9 +2169,9 @@ table.data:not(.plain-table):not(.detail-table) td:has(.table-empty)::before {
         background: rgba(255, 255, 255, 0.55);
     }
 
-    [data-theme="dark"] .panel { background: rgba(20, 14, 32, 0.55); }
+    [data-theme="dark"] .panel { background: rgba(13, 19, 28, 0.78); }
     [data-theme="dark"] .panel-head { background: rgba(255, 255, 255, 0.04); }
-    [data-theme="dark"] .stat { background: rgba(20, 14, 32, 0.55); }
+    [data-theme="dark"] .stat { background: rgba(13, 19, 28, 0.80); }
 
     .panel {
         background: rgba(255, 255, 255, 0.15);
@@ -2161,7 +2180,7 @@ table.data:not(.plain-table):not(.detail-table) td:has(.table-empty)::before {
     }
 
     [data-theme="dark"] .panel {
-        background: rgba(20, 14, 32, 0.15);
+        background: rgba(13, 19, 28, 0.78);
         backdrop-filter: none;
         -webkit-backdrop-filter: none;
     }
@@ -2360,3 +2379,2334 @@ table.data:not(.plain-table):not(.detail-table) td:has(.table-empty)::before {
     .filter-group select { min-width: 0; width: 100%; }
     .toolbar .btn { width: 100%; }
 }
+
+/* ---------------------------------------------------------------
+   24. Liquid nav — sliding pill, glare, top reflection, drifting blobs
+
+   The four things that make the Apple navigation bar look like glass
+   rather than like a grey box. Added last so these rules win over
+   section 23 without any of it having to be edited.
+
+   Everything here is decoration only. With JavaScript switched off the
+   pill and the glare never appear and the sidebar behaves exactly as it
+   did before — the plain fill behind the active link does the work.
+   --------------------------------------------------------------- */
+
+
+/* --- 1. the sliding pill ------------------------------------------------
+
+   One pill for the whole menu, moved behind whichever link is active or
+   hovered. The li is only a hook to hang it on; it takes up no room. */
+
+.nav-pill-slot {
+    height: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#nav-pill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-radius: 12px;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 0;
+
+    background: linear-gradient(180deg, #24567f 0%, #16395c 100%);
+    box-shadow:
+        0 6px 16px rgba(10, 30, 55, .30),
+        0 1px 2px  rgba(10, 30, 55, .20),
+        inset 0 1px 0 rgba(255, 255, 255, .22),
+        inset 0 -1px 0 rgba(0, 0, 0, .18);
+
+    /* The Apple spring: it overshoots very slightly and settles back. */
+    transition:
+        transform  .5s cubic-bezier(.34, 1.2, .64, 1),
+        height     .35s cubic-bezier(.34, 1.2, .64, 1),
+        width      .35s cubic-bezier(.34, 1.2, .64, 1),
+        background .3s ease,
+        opacity    .25s ease;
+}
+
+[data-theme="dark"] #nav-pill {
+    background: linear-gradient(180deg, #1e4a7a 0%, #0f2942 100%);
+    box-shadow:
+        0 6px 16px rgba(0, 0, 0, .45),
+        0 1px 2px  rgba(0, 0, 0, .25),
+        inset 0 1px 0 rgba(255, 255, 255, .18),
+        inset 0 -1px 0 rgba(0, 0, 0, .25);
+}
+
+/* The links must sit above the pill, or it would cover the words.
+
+   The pill's own li is deliberately left unpositioned. An absolutely
+   positioned element measures from its nearest positioned ancestor, so
+   positioning that li would make the pill measure from the li — which sits
+   below the list's 12px top padding — and every position would come out
+   12px too low. Leaving it static keeps the ul as the ruler, which is what
+   the script measures against. */
+.sidebar-nav li:not(.nav-pill-slot) {
+    position: relative;
+    z-index: 1;
+}
+
+/* With the pill running, anything else that paints a highlight is a second
+   pill doing the same job. There are two of them, and both have to go.
+
+   First the fill from section 23, drawn on a::before. */
+.sidebar-nav.has-pill a::before,
+.sidebar-nav.has-pill a.active::before {
+    opacity: 0;
+}
+
+/* Second — and this is the one that showed as a dark blue box stuck under
+   Home while another box followed the mouse — the solid background set on
+   the link itself back in section 3, lines 139 and 146. It is painted on
+   the <a>, not on a::before, so hiding the pseudo-element above did not
+   touch it. The sliding pill is the highlight now. */
+.sidebar-nav.has-pill a,
+.sidebar-nav.has-pill a:hover,
+.sidebar-nav.has-pill a:focus,
+.sidebar-nav.has-pill a.active {
+    background: transparent;
+    border-left-color: transparent;
+}
+
+/* --- text colour, now that the highlight moves ---------------------------
+
+   The pill is dark, so whichever link it is under needs pale text. The
+   catch is the open page: while the mouse is somewhere else the pill has
+   left it, and pale text on pale glass cannot be read. So the open page
+   keeps its colour only while nothing else is hovered. */
+
+.sidebar-nav.has-pill a.active,
+.sidebar-nav.has-pill a:hover {
+    color: #eaf3ff;
+}
+
+.sidebar-nav.has-pill:hover a.active:not(:hover) { color: #14243a; }
+
+[data-theme="dark"] .sidebar-nav.has-pill a.active,
+[data-theme="dark"] .sidebar-nav.has-pill a:hover { color: #eaf3ff; }
+
+[data-theme="dark"] .sidebar-nav.has-pill:hover a.active:not(:hover) { color: #cfd8e8; }
+
+/* Sub-items are held at 80% opacity so they read as secondary. That is
+   right until one of them is the open page and the dark pill is under it,
+   where faded pale text on dark is hard work. Full strength there. */
+.sidebar-nav.has-pill .nav-sub a.active { opacity: 1; }
+
+/* The logo is square, so its box can be held open before the file arrives.
+   Without this the brand block grows the moment the picture loads, the menu
+   below it drops by that much, and the pill — measured a moment earlier —
+   is left sitting off its link until something makes it measure again. */
+.sidebar-brand .brand-logo { aspect-ratio: 1 / 1; }
+
+
+/* --- 8. the name in the corner ------------------------------------------
+
+   CEB System / Uva Province were white, left over from when the sidebar was
+   solid navy. Section 16 set out to darken them for the glass, but wrote
+   .brand-name where the old rule says .sidebar-brand .brand-name — two
+   classes beat one, so the old white won and the words sat almost invisible
+   on pale glass.
+
+   Matching the two-class shape here settles it. Black in light, and dark
+   mode is restated with three classes so it cannot be caught by the same
+   trap in reverse. The white shadow is a hairline lift under black text on
+   a light background; in dark mode there is nothing to lift, so it goes. */
+
+.sidebar-brand .brand-name {
+    color: #000000;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, .45);
+}
+
+.sidebar-brand .brand-sub {
+    color: #000000;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, .35);
+}
+
+[data-theme="dark"] .sidebar-brand .brand-name {
+    color: #ffffff;
+    text-shadow: none;
+}
+
+[data-theme="dark"] .sidebar-brand .brand-sub {
+    color: #a9b8d0;
+    text-shadow: none;
+}
+
+/* No outline around the link. The pill moves to whatever has focus, so a
+   ring drawn on top of it is a second marker saying the same thing — it
+   was the pale blue border sitting around the pill.
+
+   Clicking a link focuses it, so the ring stayed behind after every click.
+   Keyboard users are not left without a marker: the pill itself follows
+   focus, which is why it can be dropped here. */
+.sidebar-nav.has-pill a:focus,
+.sidebar-nav.has-pill a:focus-visible {
+    outline: none;
+}
+
+/* The accent bar stays on the link that is genuinely open, so hovering
+   elsewhere never loses track of which page you are on. */
+.sidebar-nav.has-pill a.active::after { height: 60%; }
+
+
+/* --- 2. the glare that follows the mouse --------------------------------
+
+   position: fixed, because the sidebar scrolls; width: inherit so it
+   follows the sidebar through the narrow-window widths in section 19
+   without those breakpoints needing to know about it. */
+
+.sidebar::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: inherit;
+    height: 100%;
+    z-index: 3;
+    opacity: 0;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    transition: opacity .35s ease;
+    background: radial-gradient(
+        circle 170px at var(--gx, 50%) var(--gy, 50%),
+        rgba(255, 255, 255, .45) 0%,
+        rgba(255, 255, 255, 0) 70%);
+}
+
+.sidebar:hover::after { opacity: 1; }
+
+[data-theme="dark"] .sidebar::after {
+    background: radial-gradient(
+        circle 170px at var(--gx, 50%) var(--gy, 50%),
+        rgba(255, 255, 255, .16) 0%,
+        rgba(255, 255, 255, 0) 70%);
+}
+
+
+/* --- 3. the wet light along the top edge --------------------------------
+
+   The curved radius is what reads as a thickness of glass rather than a
+   flat white band. */
+
+.sidebar::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: inherit;
+    height: 170px;
+    z-index: 2;
+    pointer-events: none;
+    border-radius: 0 0 40px 40px / 0 0 22px 22px;
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, .50) 0%,
+        rgba(255, 255, 255, .12) 45%,
+        rgba(255, 255, 255, 0)   100%);
+}
+
+[data-theme="dark"] .sidebar::before {
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, .13) 0%,
+        rgba(255, 255, 255, .03) 45%,
+        rgba(255, 255, 255, 0)   100%);
+}
+
+/* The brand block sits under that light, so lift it back on top. */
+.sidebar-brand { position: relative; z-index: 4; }
+
+
+/* --- 4. drifting colour behind everything -------------------------------
+
+   The page already has its still gradient. These three move slowly on top
+   of it, so the blur in the glass has something that changes. Kept faint
+   on purpose: this is a register people read all day, not a screensaver. */
+
+.bg-blobs {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.bg-blobs .blob {
+    position: absolute;
+    display: block;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: .30;
+    will-change: transform;
+    animation: ceb-float 26s infinite alternate cubic-bezier(.45, .05, .55, .95);
+    transition: background .8s ease, opacity .8s ease;
+}
+
+.bg-blobs .blob-1 {
+    width: 46vw; height: 46vw;
+    top: -12%; left: -8%;
+    background: #34dfa3;
+    animation-delay: 0s;
+}
+
+.bg-blobs .blob-2 {
+    width: 42vw; height: 42vw;
+    bottom: -14%; right: -8%;
+    background: #5aa0e6;
+    animation-delay: -8s;
+}
+
+.bg-blobs .blob-3 {
+    width: 32vw; height: 32vw;
+    top: 34%; left: 44%;
+    background: #f7a63b;
+    animation-delay: -16s;
+}
+
+/* In the dark these are lights, not colours — each one a shade or two
+   above the near-black canvas, so they read as the page having depth
+   rather than as a purple and crimson wash across the data. */
+[data-theme="dark"] .bg-blobs .blob { opacity: .42; }
+[data-theme="dark"] .bg-blobs .blob-1 { background: #11414b; }
+[data-theme="dark"] .bg-blobs .blob-2 { background: #14406f; }
+[data-theme="dark"] .bg-blobs .blob-3 { background: #1c2d55; }
+
+@keyframes ceb-float {
+    0%   { transform: translate(0, 0)       scale(1)    rotate(0deg); }
+    33%  { transform: translate(5%, 8%)     scale(1.05) rotate(4deg); }
+    66%  { transform: translate(-4%, 4%)    scale(.96)  rotate(-4deg); }
+    100% { transform: translate(0, -8%)     scale(1.08) rotate(0deg); }
+}
+
+
+/* --- 5. for anyone who asked their computer to stop moving things ------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .bg-blobs .blob { animation: none; }
+
+    /* The pill still slides here, it just stops springing.
+
+       This rule used to drop transform, width and height from the list,
+       which left the pill jumping from link to link. That is not less
+       movement, it is the same movement with the middle taken out — and a
+       thing that teleports is harder to follow than a thing that travels.
+
+       What somebody asking for less motion is actually asking to be spared
+       is the overshoot: the cubic-bezier above ends past its target and
+       settles back, which is decoration. That goes. A short plain ease
+       stays, so the pill still shows where it has gone. */
+    #nav-pill {
+        transition:
+            transform  .15s ease,
+            width      .15s ease,
+            height     .15s ease,
+            background .2s ease,
+            opacity    .2s ease;
+    }
+}
+
+
+/* --- 6. narrow screens --------------------------------------------------
+
+   Below 861px section 14 stops the sidebar being fixed and lets it sit at
+   the top of the page as an ordinary block. The menu is still a vertical
+   list, so the pill still makes sense and stays.
+
+   The glare and the top reflection do not: both are position: fixed and
+   take their width from a sidebar that no longer has one. They stand down
+   rather than trying to guess. */
+
+@media (max-width: 860px) {
+    .sidebar::before,
+    .sidebar::after { display: none; }
+}
+
+
+/* --- 7. printing -------------------------------------------------------- */
+
+@media print {
+    .bg-blobs { display: none; }
+    #nav-pill { display: none; }
+}
+
+
+/* ---------------------------------------------------------------
+   25. Dark mode — the bits the first pass missed
+   --------------------------------------------------------------- */
+
+/* --- the totals row at the foot of a table ------------------------------
+
+   table.data tfoot td was given a pale grey bar in section 6 and never a
+   dark counterpart, so in the dark it was a white band lying across the
+   ABC grid's totals with pale grey figures on it — unreadable.
+
+   The th was never given the bar at all, in either mode, so the "Total"
+   label sat in a gap at the left end of it. Both are settled here. */
+
+table.data tfoot th {
+    background: #f4f6f9;
+    border-top: 2px solid #c3cbd6;
+    border-bottom: 0;
+    font-size: 13.5px;
+    color: #46505e;
+}
+
+[data-theme="dark"] table.data tfoot td,
+[data-theme="dark"] table.data tfoot th {
+    background: rgba(255, 255, 255, .07);
+    border-top-color: rgba(255, 255, 255, .20);
+    color: #eaf0fa;
+}
+
+/* Row labels down the side of the ABC grid — the phase names. They are th
+   cells in the body, which no rule had coloured, so they were living on
+   whatever the page happened to inherit. */
+[data-theme="dark"] table.data tbody th { color: #e3ebf6; }
+
+
+/* --- letting the picture through the tiles ------------------------------
+
+   In light mode a panel is only 15% white, so the background photograph and
+   the drifting colour read faintly through every tile, and that is what
+   makes the page look like glass rather than paper.
+
+   Dark mode had been taken to 78%, which fixed the washed-out text but
+   sealed the tiles shut — no picture, no depth. These sit in between: dark
+   enough that the text is still far past the strictest contrast standard,
+   open enough that the picture comes back. */
+
+[data-theme="dark"] .panel { background: rgba(13, 19, 28, 0.52); }
+[data-theme="dark"] .stat  { background: rgba(13, 19, 28, 0.56); }
+
+/* And the picture needs to be there to be seen through them. */
+[data-theme="dark"] body::before { opacity: .10; }
+
+
+/* --- three that the audit turned up -------------------------------------
+
+   Found by listing every pale background in the stylesheet and checking
+   which had no dark counterpart. Most of the list was CSS nothing uses any
+   more, or cases the cascade already covers — a dark rule with more classes
+   in it quietly wins. These three are real and on pages people open. */
+
+/* The role chip on My Profile had no dark rule at all, so ADMIN sat there
+   as a pale badge on a dark page. */
+[data-theme="dark"] .role {
+    background: rgba(255, 255, 255, .09);
+    border-color: rgba(255, 255, 255, .18);
+    color: #ccd8ea;
+}
+
+[data-theme="dark"] .role-admin {
+    background: rgba(90, 150, 230, .22);
+    border-color: rgba(90, 150, 230, .45);
+    color: #b9d4f7;
+}
+
+[data-theme="dark"] table.data tbody tr.row-inactive .role {
+    background: rgba(255, 255, 255, .05);
+    border-color: rgba(255, 255, 255, .12);
+    color: #8b97a8;
+}
+
+/* Cancelled was the one status badge never given a dark version. It was
+   readable — the general .badge rule caught it — but it came out the same
+   grey as everything else, so the one status that means "this did not
+   happen" looked like any other. */
+[data-theme="dark"] .badge-cancelled {
+    background: rgba(255, 255, 255, .06);
+    border-color: rgba(255, 255, 255, .20);
+    color: #aab6c6;
+}
+
+/* Hovering an unassigned event lost its amber tint and went plain grey,
+   which is the one row colour that is there to be noticed. */
+[data-theme="dark"] table.data tbody tr.row-unassigned:hover {
+    background: rgba(211, 173, 72, .22);
+}
+
+
+/* ---------------------------------------------------------------
+   26. Edit history cards
+
+   Section 20 turns every .data table into one tile per row. On the
+   Edit History page a row is a single changed field, so one save
+   that cleared four conditional boxes produced four near-identical
+   tiles, each repeating the same time, record and author.
+
+   A save is the unit a person remembers, so a save is the card.
+   The time, the record and the author are said once in the head,
+   and the fields that changed are listed underneath.
+   --------------------------------------------------------------- */
+
+.hist-card {
+    margin: 0 0 14px 0;
+    border: 1px solid rgba(0, 0, 0, .12);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, .45);
+    overflow: hidden;
+}
+
+.hist-card-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 4px 16px;
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, .12);
+    background: rgba(233, 238, 244, .75);
+}
+
+.hist-who { min-width: 0; }
+
+.hist-what {
+    display: block;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #14243a;
+}
+
+.hist-what a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.hist-what a:hover,
+.hist-what a:focus { text-decoration: underline; }
+
+.hist-meta {
+    display: block;
+    margin-top: 2px;
+    font-size: 12.5px;
+    color: #55606d;
+}
+
+.hist-count {
+    flex: 0 0 auto;
+    padding-top: 2px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #55606d;
+    white-space: nowrap;
+}
+
+.hist-changes {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.hist-changes li {
+    display: grid;
+    grid-template-columns: minmax(130px, 190px) 1fr;
+    gap: 3px 16px;
+    padding: 9px 16px;
+    border-bottom: 1px dashed rgba(0, 0, 0, .10);
+}
+
+.hist-changes li:last-child { border-bottom: 0; }
+
+.hist-field {
+    padding-top: 2px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: #55606d;
+}
+
+/* Descriptions can run to 255 characters, so unlike .cap-change this
+   one is allowed to wrap rather than push the card sideways. */
+.hist-value { word-break: break-word; }
+
+.hist-old   { color: #6b7684; }
+.hist-arrow { padding: 0 7px; color: #6b7684; }
+.hist-new   { font-weight: 700; color: #14243a; }
+
+@media (max-width: 640px) {
+    .hist-changes li { grid-template-columns: 1fr; }
+}
+
+/* --- dark --- */
+
+[data-theme="dark"] .hist-card {
+    background: rgba(255, 255, 255, .045);
+    border-color: rgba(255, 255, 255, .12);
+}
+
+[data-theme="dark"] .hist-card-head {
+    background: rgba(255, 255, 255, .05);
+    border-bottom-color: rgba(255, 255, 255, .12);
+}
+
+[data-theme="dark"] .hist-what,
+[data-theme="dark"] .hist-new { color: #eaf1fb; }
+
+[data-theme="dark"] .hist-meta,
+[data-theme="dark"] .hist-count,
+[data-theme="dark"] .hist-field { color: #9fb0cc; }
+
+[data-theme="dark"] .hist-changes li {
+    border-bottom-color: rgba(255, 255, 255, .09);
+}
+
+[data-theme="dark"] .hist-old,
+[data-theme="dark"] .hist-arrow { color: #97a4b8; }
+
+
+/* ---------------------------------------------------------------
+   27. Rows that open a record
+
+   The Action column was three links repeating what the row already
+   points at, so the row itself became the button. The pointer and
+   the keyboard outline are what say so — the handler is in
+   footer.php and only fires for rows carrying data-href.
+   --------------------------------------------------------------- */
+
+tr[data-href] { cursor: pointer; }
+
+/* The first cell keeps a real link for the keyboard. It should read as
+   part of the row, not as a separate blue link sitting inside it. */
+tr[data-href] td:first-child a {
+    color: inherit;
+    text-decoration: none;
+}
+
+tr[data-href]:hover td:first-child a { text-decoration: underline; }
+
+/* Tabbing to that link must show which row is about to open. */
+tr[data-href] td:first-child a:focus-visible {
+    outline: 2px solid #17457c;
+    outline-offset: 2px;
+    border-radius: 3px;
+}
+
+[data-theme="dark"] tr[data-href] td:first-child a:focus-visible {
+    outline-color: #7fb6ff;
+}
+
+
+/* ---------------------------------------------------------------
+   28. Dashboard charts
+
+   One blue does all the work. Every chart here plots a single
+   series, so colour is not carrying identity and a second hue
+   would only be decoration. The steps are the validated ones for
+   this app's glass surfaces: #2a78d6 reads 4.19:1 on the light
+   panel, #3987e5 reads 5.17:1 on the dark one.
+
+   Text never wears the data colour — labels and values use the
+   ordinary ink tokens, and the coloured bar beside them is what
+   carries the meaning.
+   --------------------------------------------------------------- */
+
+/* align-items: start is load-bearing. A grid stretches its items to the
+   tallest in the row by default, so the moment the work-type list grew, the
+   map panel grew with it — and the map inside, being a flex item with
+   height:auto, stretched to fill the new space. Each panel now takes its
+   own height. */
+.chart-pair {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    align-items: start;
+    gap: 0 24px;
+}
+
+.chart-pair .panel { min-width: 0; }
+
+/* --- the month line --- */
+
+.chart-line { position: relative; }
+
+.chart-svg {
+    display: block;
+    width: 100%;
+    height: 240px;
+}
+
+.chart-grid  { stroke: #c9cfd6; stroke-width: 1; }
+.chart-axis  { fill: #52514e; font-size: 11px; font-family: inherit; }
+.chart-area  { fill: #2a78d6; opacity: .10; }
+
+.chart-line-path {
+    fill: none;
+    stroke: #2a78d6;
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+}
+
+/* The ring is the surface colour, so a dot stays legible wherever
+   it lands on the line. */
+.chart-dot,
+.chart-hot {
+    fill: #2a78d6;
+    stroke: #f8f9fa;
+    stroke-width: 2;
+}
+
+.chart-endlabel {
+    fill: #14243a;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: inherit;
+}
+
+.chart-hair {
+    stroke: #2a78d6;
+    stroke-width: 1;
+    opacity: .45;
+    vector-effect: non-scaling-stroke;
+}
+
+.chart-tip {
+    position: absolute;
+    transform: translate(-50%, -175%);
+    padding: 5px 10px;
+    border-radius: 7px;
+    background: rgba(20, 36, 58, .94);
+    color: #f2f6fb;
+    font-size: 12.5px;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+
+@media (max-width: 640px) {
+    .chart-svg { height: 200px; }
+}
+
+/* --- dark --- */
+
+
+[data-theme="dark"] .chart-grid { stroke: #2c3846; }
+[data-theme="dark"] .chart-axis { fill: #9fb0cc; }
+[data-theme="dark"] .chart-area { fill: #3987e5; opacity: .14; }
+[data-theme="dark"] .chart-line-path { stroke: #3987e5; }
+
+[data-theme="dark"] .chart-dot,
+[data-theme="dark"] .chart-hot {
+    fill: #3987e5;
+    stroke: #0c121a;
+}
+
+[data-theme="dark"] .chart-endlabel { fill: #eaf1fb; }
+[data-theme="dark"] .chart-hair     { stroke: #3987e5; }
+
+[data-theme="dark"] .chart-tip {
+    background: rgba(8, 14, 22, .94);
+    color: #eaf1fb;
+}
+
+/* Movement is decoration here, and a bar sliding on every refresh is
+   the kind of decoration that gets in the way. */
+@media (prefers-reduced-motion: reduce) {
+}
+
+
+/* ---------------------------------------------------------------
+   29. The area ring
+
+   Five slices, because a ring is only readable while the shares
+   are far enough apart to tell apart — 26% against 17% is. The
+   seventeen CSCs are bars for the same reason: eight of them sit
+   between 6.7% and 6.1%, which as slices is a ring of identical
+   wedges.
+
+   The five hues are the validated categorical slots. Three of the
+   light ones sit below 3:1 on this surface, so by the relief rule
+   the legend carries the name, the count and the share in plain
+   ink, and the table underneath repeats all of it. Nothing on this
+   chart is said by colour alone.
+   --------------------------------------------------------------- */
+
+.chart-donut {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 22px;
+}
+
+.donut-svg {
+    flex: 0 0 auto;
+    width: 190px;
+    height: 190px;
+}
+
+/* The gap between slices is the surface showing through, not a
+   drawn border: a stroke would add ink that is not data. */
+.donut-slice {
+    stroke: #f8f9fa;
+    stroke-width: 2;
+    transition: opacity .15s ease;
+    cursor: default;
+}
+
+.chart-donut:hover .donut-slice { opacity: .45; }
+.chart-donut .donut-slice.is-on { opacity: 1; }
+
+.donut-total {
+    fill: #14243a;
+    font-size: 26px;
+    font-weight: 700;
+    font-family: inherit;
+}
+
+.donut-sub {
+    fill: #52514e;
+    font-size: 11px;
+    font-family: inherit;
+    letter-spacing: .04em;
+}
+
+.donut-legend {
+    flex: 1 1 190px;
+    min-width: 0;
+    display: grid;
+    gap: 2px 0;
+}
+
+.legend-row {
+    display: grid;
+    grid-template-columns: 12px 1fr auto auto;
+    align-items: center;
+    gap: 0 10px;
+    padding: 4px 6px;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.legend-row.is-on { background: rgba(11, 11, 11, .06); }
+
+.legend-dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 3px;
+}
+
+.legend-name {
+    color: #52514e;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.legend-value {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: #14243a;
+}
+
+.legend-pct {
+    min-width: 3.4em;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: #6b7684;
+}
+
+/* Slot colours. Fill for the slices, background for the legend dots. */
+.donut-s1 { fill: #2a78d6; background: #2a78d6; }
+.donut-s2 { fill: #eb6834; background: #eb6834; }
+.donut-s3 { fill: #1baf7a; background: #1baf7a; }
+.donut-s4 { fill: #eda100; background: #eda100; }
+.donut-s5 { fill: #e87ba4; background: #e87ba4; }
+
+
+/* --- dark --- */
+
+[data-theme="dark"] .donut-slice  { stroke: #0c121a; }
+[data-theme="dark"] .donut-total  { fill: #eaf1fb; }
+[data-theme="dark"] .donut-sub    { fill: #9fb0cc; }
+[data-theme="dark"] .legend-name  { color: #9fb0cc; }
+[data-theme="dark"] .legend-value { color: #eaf1fb; }
+[data-theme="dark"] .legend-pct   { color: #8b9ab0; }
+[data-theme="dark"] .legend-row.is-on { background: rgba(255, 255, 255, .08); }
+
+[data-theme="dark"] .donut-s1 { fill: #3987e5; background: #3987e5; }
+[data-theme="dark"] .donut-s2 { fill: #d95926; background: #d95926; }
+[data-theme="dark"] .donut-s3 { fill: #199e70; background: #199e70; }
+[data-theme="dark"] .donut-s4 { fill: #c98500; background: #c98500; }
+[data-theme="dark"] .donut-s5 { fill: #d55181; background: #d55181; }
+
+@media (prefers-reduced-motion: reduce) {
+    .donut-slice { transition: none; }
+}
+
+/* The ranked list's own dark steps, and the mobile rule that stops the
+   name column from squeezing the numbers off the end. */
+
+@media (max-width: 640px) {
+}
+
+
+/* ---------------------------------------------------------------
+   30. The Uva map
+
+   Real survey outlines, one blue, and dots whose area — not radius
+   — carries the count. The province is the figure; its neighbours
+   are ground, drawn faintly so Uva has an edge to sit against
+   rather than floating in white.
+   --------------------------------------------------------------- */
+
+.chart-map {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    /* Not stretch: the map keeps the height its own drawing needs, however
+       tall the panel beside it happens to be. */
+    align-items: flex-start;
+    min-height: 260px;
+}
+
+.map-svg {
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+}
+
+/* Neighbouring provinces: present, but never competing with Uva. */
+.map-other {
+    fill: rgba(11, 11, 11, .05);
+    stroke: rgba(11, 11, 11, .10);
+    stroke-width: .8;
+}
+
+.map-uva {
+    fill: rgba(42, 120, 214, .13);
+    stroke: #2a78d6;
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+}
+
+/* The ring is the surface colour, so a dot stays readable where it
+   crosses the province edge. */
+.map-dot {
+    fill: #2a78d6;
+    stroke: #f8f9fa;
+    stroke-width: 2;
+    transition: opacity .15s ease;
+}
+
+.map-name {
+    fill: #14243a;
+    font-family: inherit;
+    font-size: 10.5px;
+    font-weight: 700;
+    paint-order: stroke;
+    stroke: #f8f9fa;
+    stroke-width: 3;
+    stroke-linejoin: round;
+}
+
+.map-count {
+    fill: #52514e;
+    font-family: inherit;
+    font-size: 10px;
+    font-variant-numeric: tabular-nums;
+    paint-order: stroke;
+    stroke: #f8f9fa;
+    stroke-width: 3;
+    stroke-linejoin: round;
+}
+
+.map-pin { cursor: default; }
+
+/* Only drawn when a label had to move off its dot to avoid another. */
+.map-leader {
+    stroke: #8a939f;
+    stroke-width: 1;
+}
+.chart-map:hover .map-dot { opacity: .5; }
+.map-pin:hover .map-dot   { opacity: 1; }
+
+/* The locator: where Uva sits in the country, for anyone who does
+   not already know. */
+.map-inset {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 62px;
+    height: auto;
+    opacity: .9;
+}
+
+.inset-other {
+    fill: rgba(11, 11, 11, .07);
+    stroke: rgba(11, 11, 11, .12);
+    stroke-width: .5;
+}
+
+.inset-uva { fill: #2a78d6; stroke: none; }
+
+.map-note { margin-top: 12px; line-height: 1.45; }
+
+/* --- dark --- */
+
+[data-theme="dark"] .map-other {
+    fill: rgba(255, 255, 255, .05);
+    stroke: rgba(255, 255, 255, .10);
+}
+
+[data-theme="dark"] .map-uva {
+    fill: rgba(57, 135, 229, .18);
+    stroke: #3987e5;
+}
+
+[data-theme="dark"] .map-dot { fill: #3987e5; stroke: #0c121a; }
+
+[data-theme="dark"] .map-name  { fill: #eaf1fb; stroke: #0c121a; }
+[data-theme="dark"] .map-count { fill: #9fb0cc; stroke: #0c121a; }
+[data-theme="dark"] .map-leader { stroke: #7d8ba0; }
+
+[data-theme="dark"] .inset-other {
+    fill: rgba(255, 255, 255, .07);
+    stroke: rgba(255, 255, 255, .12);
+}
+
+[data-theme="dark"] .inset-uva { fill: #3987e5; }
+
+@media (prefers-reduced-motion: reduce) {
+    .map-dot { transition: none; }
+}
+
+
+/* ---------------------------------------------------------------
+   31. The office area map
+
+   The five shapes come from the CEB's own Area & CSC map. They wear
+   the same five slot colours as the ring beside them, assigned by
+   area name, so one area is one colour across the whole dashboard.
+
+   Every shape carries its name and its count in plain ink, which is
+   what keeps the map readable for anyone who cannot tell the five
+   hues apart.
+   --------------------------------------------------------------- */
+
+.area-shape {
+    stroke: #f8f9fa;
+    stroke-width: 3;
+    stroke-linejoin: round;
+    fill-opacity: .82;
+    transition: fill-opacity .15s ease;
+}
+
+.chart-map:hover .area-shape  { fill-opacity: .35; }
+.map-area:hover .area-shape   { fill-opacity: 1; }
+.map-area { cursor: default; }
+
+.area-name {
+    fill: #10233c;
+    font-family: inherit;
+    font-size: 30px;
+    font-weight: 700;
+    paint-order: stroke;
+    stroke: rgba(255, 255, 255, .85);
+    stroke-width: 5;
+    stroke-linejoin: round;
+    pointer-events: none;
+}
+
+.area-count {
+    fill: #10233c;
+    font-family: inherit;
+    font-size: 26px;
+    font-variant-numeric: tabular-nums;
+    paint-order: stroke;
+    stroke: rgba(255, 255, 255, .85);
+    stroke-width: 5;
+    stroke-linejoin: round;
+    pointer-events: none;
+}
+
+/* The map is tall and narrow, so it is allowed more height than the
+   other charts and is centred in whatever width it is given. */
+.chart-map .map-svg {
+    max-width: 260px;
+    max-height: 440px;
+}
+
+/* --- dark --- */
+
+[data-theme="dark"] .area-shape { stroke: #0c121a; fill-opacity: .70; }
+[data-theme="dark"] .chart-map:hover .area-shape { fill-opacity: .28; }
+[data-theme="dark"] .map-area:hover .area-shape  { fill-opacity: .92; }
+
+[data-theme="dark"] .area-name,
+[data-theme="dark"] .area-count {
+    fill: #f2f7ff;
+    stroke: rgba(6, 12, 20, .85);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .area-shape { transition: none; }
+}
+
+
+/* ---------------------------------------------------------------
+   32. The search bar in the heading
+
+   The box used to be in the body with its results underneath. Once
+   the dashboard moved to the top, those results were a screen and a
+   half below the fold — you searched and nothing appeared to happen.
+   Box and answer now both sit at the top, in that order.
+   --------------------------------------------------------------- */
+
+.head-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    /* Grows into the space, but stops before it becomes a stripe across a
+       very wide screen. */
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 820px;
+    padding: 0 6px 0 12px;
+    border: 1px solid #a9b3c0;
+    border-radius: 999px;
+    background: #ffffff;
+}
+
+.head-search:focus-within {
+    border-color: #17457c;
+    box-shadow: 0 0 0 3px rgba(23, 69, 124, .15);
+}
+
+.head-search-icon {
+    flex: 0 0 auto;
+    color: #6b7684;
+}
+
+.head-search input[type="search"] {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: auto;
+    max-width: none;
+    margin: 0;
+    padding: 8px 0;
+    border: 0;
+    background: none;
+    color: #14243a;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.head-search input[type="search"]:focus {
+    outline: none;
+    border: 0;
+    box-shadow: none;
+}
+
+.head-search-go {
+    flex: 0 0 auto;
+    padding: 6px 14px;
+    border: 0;
+    border-radius: 999px;
+    background: #17457c;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.head-search-go:hover { background: #10345e; }
+
+/* Nothing searched for yet, nothing to say. */
+.search-hero-hints:empty { display: none; }
+
+@media (max-width: 860px) {
+    .head-search { width: 100%; }
+    .head-search input[type="search"] { flex: 1 1 auto; }
+}
+
+/* --- dark --- */
+
+[data-theme="dark"] .head-search {
+    background: rgba(255, 255, 255, .07);
+    border-color: rgba(255, 255, 255, .18);
+}
+
+[data-theme="dark"] .head-search:focus-within {
+    border-color: #7fb6ff;
+    box-shadow: 0 0 0 3px rgba(127, 182, 255, .18);
+}
+
+[data-theme="dark"] .head-search-icon { color: #9fb0cc; }
+
+[data-theme="dark"] .head-search input[type="search"] {
+    color: #eaf1fb;
+}
+
+[data-theme="dark"] .head-search input[type="search"]::placeholder {
+    color: #8b9ab0;
+}
+
+[data-theme="dark"] .head-search-go {
+    background: #3987e5;
+    color: #06101d;
+}
+
+[data-theme="dark"] .head-search-go:hover { background: #5b9ceb; }
+
+
+/* ---------------------------------------------------------------
+   33. CSC divisions on the map
+
+   The shapes are the seventeen CSCs, each wearing its area's colour,
+   so the five areas still read as five blocks while the divisions
+   inside them are visible. The line between two CSCs is the surface
+   showing through, not a drawn border — the same rule the stacked
+   marks follow.
+   --------------------------------------------------------------- */
+
+.csc-shape {
+    stroke: #f8f9fa;
+    stroke-width: 2;
+    stroke-linejoin: round;
+    fill-opacity: .82;
+    transition: fill-opacity .15s ease;
+}
+
+.map-csc { cursor: default; }
+
+.chart-map:hover .csc-shape { fill-opacity: .32; }
+.map-csc:hover .csc-shape   { fill-opacity: 1; }
+
+/* The names are written over the shapes, so they must not swallow the
+   pointer on its way to the CSC underneath. */
+.map-area { pointer-events: none; }
+
+[data-theme="dark"] .csc-shape { stroke: #0c121a; fill-opacity: .70; }
+[data-theme="dark"] .chart-map:hover .csc-shape { fill-opacity: .26; }
+[data-theme="dark"] .map-csc:hover .csc-shape   { fill-opacity: .95; }
+
+@media (prefers-reduced-motion: reduce) {
+    .csc-shape { transition: none; }
+}
+
+
+/* ---------------------------------------------------------------
+/* ---------------------------------------------------------------
+   34. The block under the ring
+   --------------------------------------------------------------- */
+
+.mini-chart {
+    margin-top: 22px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(11, 11, 11, .10);
+}
+
+.mini-title {
+    margin: 0 0 6px 0;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #55606d;
+}
+
+[data-theme="dark"] .mini-chart { border-top-color: rgba(255, 255, 255, .10); }
+[data-theme="dark"] .mini-title { color: #9fb0cc; }
+
+
+/* ---------------------------------------------------------------
+   35. Tiles that open something
+
+   .stat-link and .stat-active were used on the home page and on the
+   Events filter but never styled, so a linked tile fell back to the
+   browser's own link paint — underlined text inside a card — and the
+   Events page gave no sign of which status was being shown.
+   --------------------------------------------------------------- */
+
+a.stat-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    transition: border-top-color .15s ease, background .15s ease,
+                transform .15s ease;
+}
+
+a.stat-link:hover,
+a.stat-link:focus-visible {
+    background: rgba(255, 255, 255, 0.95);
+    border-top-color: #2a78d6;
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+a.stat-link:focus-visible {
+    outline: 2px solid #17457c;
+    outline-offset: 2px;
+}
+
+/* The one being shown. It is still a link — pressing it goes to the
+   same place — but it says it is the open one. */
+.stat-active {
+    border-top-color: #2a78d6;
+    background: rgba(42, 120, 214, .10);
+}
+
+.stat-active .stat-value { color: #17457c; }
+
+/* --- dark --- */
+
+[data-theme="dark"] a.stat-link:hover,
+[data-theme="dark"] a.stat-link:focus-visible {
+    background: rgba(255, 255, 255, .09);
+    border-top-color: #3987e5;
+}
+
+[data-theme="dark"] a.stat-link:focus-visible { outline-color: #7fb6ff; }
+
+[data-theme="dark"] .stat-active {
+    border-top-color: #3987e5;
+    background: rgba(57, 135, 229, .16);
+}
+
+[data-theme="dark"] .stat-active .stat-value { color: #9fc8ff; }
+
+@media (prefers-reduced-motion: reduce) {
+    a.stat-link { transition: none; }
+    a.stat-link:hover,
+    a.stat-link:focus-visible { transform: none; }
+}
+
+
+/* ---------------------------------------------------------------
+   36. The work-type list
+
+   A plain list with a bulb beside each name.
+
+   This was a wheel, then a honeycomb, then a tree. Each one put a
+   drawing into a half-width panel and shrank the names until they
+   could not be read — which is the whole problem, because there is
+   no quantity in this list to draw. The names ARE the content, so
+   they are set at full size and never scaled. The bulbs are colour
+   and nothing more; the name identifies the type.
+   --------------------------------------------------------------- */
+
+.type-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 2px 18px;
+    margin: 0;
+    padding: 0 0 4px 0;
+    list-style: none;
+}
+
+/* Three columns: the bulb, the name, and how many are still to do.
+   The count is its own column so every number lines up down the list
+   instead of trailing off the end of a name. */
+.type-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0 9px;
+    padding: 5px 0;
+    min-width: 0;
+}
+
+.type-count {
+    font-size: 13px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: #14243a;
+}
+
+/* Nothing booked against it. Still listed — a nought is a real answer —
+   but it should not compete with the types that have work waiting. */
+.type-item.is-idle .type-name { color: #8a939f; }
+.type-item.is-idle .type-count { color: #a7aeb8; font-weight: 600; }
+.type-item.is-idle .bulb-glass { opacity: .32; }
+.type-item.is-idle .bulb-cap   { opacity: .45; }
+
+.type-bulb {
+    flex: 0 0 auto;
+    display: block;
+}
+
+.bulb-cap { fill: #b3b7be; }
+
+.type-name {
+    font-size: 13px;
+    color: #24354f;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* The eight validated hues, cycled. Nothing is encoded by them here —
+   the name beside the bulb is what identifies the work type. */
+.slot-1 { fill: #2a78d6; }
+.slot-2 { fill: #eb6834; }
+.slot-3 { fill: #1baf7a; }
+.slot-4 { fill: #eda100; }
+.slot-5 { fill: #e87ba4; }
+.slot-6 { fill: #008300; }
+.slot-7 { fill: #4a3aa7; }
+.slot-8 { fill: #e34948; }
+
+/* --- dark --- */
+
+[data-theme="dark"] .type-name { color: #cfdcea; }
+[data-theme="dark"] .type-count { color: #eaf1fb; }
+[data-theme="dark"] .type-item.is-idle .type-name { color: #77839a; }
+[data-theme="dark"] .type-item.is-idle .type-count { color: #6b7789; }
+[data-theme="dark"] .bulb-cap  { fill: #7e838b; }
+
+[data-theme="dark"] .slot-1 { fill: #3987e5; }
+[data-theme="dark"] .slot-2 { fill: #d95926; }
+[data-theme="dark"] .slot-3 { fill: #199e70; }
+[data-theme="dark"] .slot-4 { fill: #c98500; }
+[data-theme="dark"] .slot-5 { fill: #d55181; }
+[data-theme="dark"] .slot-6 { fill: #008300; }
+[data-theme="dark"] .slot-7 { fill: #9085e9; }
+[data-theme="dark"] .slot-8 { fill: #e66767; }
+
+/* --------------------------------------------------------------------------
+   The first-login box
+
+   Shown over the home page to an account still on the starting password.
+   It is deliberately not dismissible: no close button, Escape does nothing,
+   and clicking the backdrop does nothing either. The two ways out are
+   setting a password and signing out.
+
+   position: fixed over the whole window, above the sidebar (z-index 100),
+   so nothing behind it can be clicked.
+   -------------------------------------------------------------------------- */
+
+.pw-gate {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(12, 26, 44, .55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    overflow-y: auto;
+}
+
+.pw-gate-box {
+    width: 100%;
+    max-width: 460px;
+    background: #ffffff;
+    border: 1px solid #d5dae1;
+    border-radius: 10px;
+    box-shadow: 0 18px 50px rgba(8, 20, 36, .35);
+    animation: pw-gate-in .18s ease-out;
+}
+
+/* Held back from anyone who has asked for less movement on screen. */
+@keyframes pw-gate-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pw-gate-box { animation: none; }
+}
+
+.pw-gate-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+    border-bottom: 1px solid #dfe3e9;
+    background: #f7f9fb;
+    border-radius: 10px 10px 0 0;
+}
+
+.pw-gate-head h2 {
+    font-size: 17px;
+    margin: 0;
+}
+
+.pw-gate-icon {
+    width: 22px;
+    height: 22px;
+    flex: 0 0 auto;
+    color: #17457c;
+}
+
+.pw-gate-body {
+    padding: 18px 20px 20px 20px;
+}
+
+.pw-gate-lead {
+    margin: 0 0 16px 0;
+    font-size: 14.5px;
+    color: #3d4855;
+}
+
+/* Hidden until there is something to say. */
+.pw-gate-msg {
+    display: none;
+}
+
+.pw-gate-box input[type="password"] {
+    max-width: 100%;
+}
+
+.pw-gate-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #e6e9ee;
+}
+
+.pw-gate-out {
+    font-size: 13.5px;
+    color: #5c6773;
+}
+
+/* Narrow screens: the box takes what it can get. */
+@media (max-width: 560px) {
+    .pw-gate { padding: 12px; }
+    .pw-gate-actions { flex-direction: column-reverse; align-items: stretch; }
+    .pw-gate-actions .btn { width: 100%; }
+    .pw-gate-out { text-align: center; }
+}
+
+/* --- dark --- */
+
+[data-theme="dark"] .pw-gate {
+    background: rgba(4, 10, 20, .68);
+}
+
+[data-theme="dark"] .pw-gate-box {
+    background: #16243a;
+    border-color: rgba(255, 255, 255, .12);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, .55);
+}
+
+[data-theme="dark"] .pw-gate-head {
+    background: rgba(255, 255, 255, .04);
+    border-bottom-color: rgba(255, 255, 255, .10);
+}
+
+[data-theme="dark"] .pw-gate-head h2 { color: #eaf1fb; }
+[data-theme="dark"] .pw-gate-icon    { color: #7fb0e8; }
+[data-theme="dark"] .pw-gate-lead    { color: #c3d0e2; }
+[data-theme="dark"] .pw-gate-lead strong { color: #eaf1fb; }
+[data-theme="dark"] .pw-gate-actions { border-top-color: rgba(255, 255, 255, .10); }
+[data-theme="dark"] .pw-gate-out     { color: #a9b8d0; }
+
+/* A checkbox with its wording beside it rather than above it. The label
+   above still names the row; this one is the sentence you tick. */
+.inline-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-weight: 400;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.inline-check input[type="checkbox"] {
+    width: auto;
+    margin: 2px 0 0 0;
+    flex: 0 0 auto;
+}
+
+[data-theme="dark"] .inline-check { color: #c3d0e2; }
+[data-theme="dark"] .inline-check strong { color: #eaf1fb; }
+
+
+
+/* ---------------------------------------------------------------
+   37. Transformers by capacity
+
+   Ranked horizontal bars, one per capacity, each split by type.
+   Capacity is the spine because it is what the register records;
+   the type is the split inside the bar.
+
+   The four type hues are slots 1-4 of the validated set already
+   used by the ring and the map, in fixed order, so a type keeps
+   its colour whatever the counts do. "Not recorded" is deliberately
+   grey and outside that set: an absence is not a category, and at
+   99.9% of the register a hue for it would drown the three real
+   answers.
+
+   Validated against the light panel (#f8f9fa) and the dark one
+   (#0c121a): lightness band, chroma floor, protan/deutan separation
+   and the normal-vision floor all pass in both. #1baf7a comes in at
+   2.67:1 on light, under the 3:1 relief line, which is why every bar
+   carries its count in plain ink and the legend repeats every figure
+   — nothing here is said by colour alone.
+   --------------------------------------------------------------- */
+
+/* The tooltip inside is position: absolute, so this has to be the thing
+   it measures from. Without it the nearest positioned ancestor is .main,
+   which is the whole page: the tip still appeared, just hundreds of
+   pixels away from the bar that raised it. .chart-line and .chart-map
+   have carried this rule all along — the bars were simply never given
+   one, because the container class was written in the markup and then
+   never styled. */
+.chart-bars {
+    position: relative;
+}
+
+.cap-chart {
+    display: grid;
+    gap: 7px 0;
+}
+
+/* label | bar | count. The label column is fixed so every bar starts
+   at the same place and their lengths can be compared down the page. */
+.cap-row {
+    display: grid;
+    grid-template-columns: minmax(96px, 148px) 1fr auto;
+    align-items: center;
+    gap: 0 12px;
+}
+
+.cap-label {
+    font-size: 12.5px;
+    color: #52514e;
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* The track is the full width; the bar inside it is the value. No
+   fill on the track — an empty rail drawn in ink would be a second
+   mark saying nothing. */
+.cap-track {
+    display: block;
+    width: 100%;
+    min-width: 0;
+}
+
+/* Both minimums are load-bearing.
+
+   One transformer out of 1,382 is 0.07% of its bar. Left to the
+   percentage it would be a fraction of a pixel, and with the 2px gap
+   border eating into it — box-sizing is border-box globally — it would
+   come out as pure gap: the only recorded Bulk in the province, drawn
+   as nothing. 5px leaves 3px of colour showing through the gap.
+
+   The segments are flex items with flex-shrink at its default, so where
+   the minimums push the row past 100% the big segment gives the space
+   back rather than overflowing the bar. */
+.cap-bar {
+    display: flex;
+    height: 16px;
+    min-width: 10px;
+    border-radius: 3px;
+}
+
+.cap-seg {
+    display: block;
+    height: 100%;
+    min-width: 5px;
+}
+
+/* The 2px gap between two fills. It is written as a border because that
+   is the one way to take the space out of the segment itself rather than
+   add to it — border-box is set globally — so the segments still total
+   100% of the bar. It is painted in the surface colour, so what shows is
+   the panel behind, not a line drawn around the mark. */
+.cap-seg:not(.is-last) {
+    border-right: 2px solid #f8f9fa;
+}
+
+/* The row takes focus, so it has to show it. */
+.cap-row:focus-visible {
+    outline: 2px solid #17457c;
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+.cap-row:focus:not(:focus-visible) { outline: none; }
+
+/* 4px rounded data-end, anchored square at the baseline. */
+.cap-seg.is-first { border-radius: 3px 0 0 3px; }
+.cap-seg.is-last  { border-radius: 0 3px 3px 0; }
+.cap-seg.is-first.is-last { border-radius: 3px; }
+
+.cap-total {
+    font-size: 12.5px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: #14243a;
+    min-width: 3.6em;
+    text-align: right;
+}
+
+.cap-legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 0 18px;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(11, 11, 11, .10);
+}
+
+/* The four type hues, and the grey that is not one of them. Both fill
+   and background, so the same class paints a bar segment and its
+   legend dot. */
+.tx-bulk  { background: #2a78d6; fill: #2a78d6; }
+.tx-dist  { background: #eb6834; fill: #eb6834; }
+.tx-bd    { background: #1baf7a; fill: #1baf7a; }
+.tx-other { background: #eda100; fill: #eda100; }
+.tx-none  { background: #7b8592; fill: #7b8592; }
+
+@media (max-width: 640px) {
+    .cap-row { grid-template-columns: minmax(82px, 110px) 1fr auto; gap: 0 8px; }
+    .cap-label, .cap-total { font-size: 11.5px; }
+}
+
+/* --- dark --- */
+
+[data-theme="dark"] .cap-label { color: #9fb0cc; }
+[data-theme="dark"] .cap-total { color: #eaf1fb; }
+[data-theme="dark"] .cap-legend { border-top-color: rgba(255, 255, 255, .10); }
+
+/* The gap is whatever the surface is, so it changes with the theme. */
+[data-theme="dark"] .cap-seg:not(.is-last) { border-right-color: #0c121a; }
+[data-theme="dark"] .cap-row:focus-visible { outline-color: #7fb6ff; }
+
+/* Dark mode is its own steps from the same ramps, chosen against the
+   dark surface — not an automatic lightening of the light ones. */
+[data-theme="dark"] .tx-bulk  { background: #3987e5; fill: #3987e5; }
+[data-theme="dark"] .tx-dist  { background: #d95926; fill: #d95926; }
+[data-theme="dark"] .tx-bd    { background: #199e70; fill: #199e70; }
+[data-theme="dark"] .tx-other { background: #c98500; fill: #c98500; }
+[data-theme="dark"] .tx-none  { background: #68737f; fill: #68737f; }
+
+/* --- the breakdown tooltip -------------------------------------------
+
+   .chart-tip is a single nowrap line, which is right for the month chart
+   and wrong for a breakdown: three types on one line is a paragraph to
+   read. These turn the same box into a small stacked list, so the counts
+   sit under each other and can be compared at a glance. Each line still
+   names its type in plain ink beside the colour — the dot supports the
+   name, it does not replace it. */
+
+.chart-tip .tip-head {
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.chart-tip .tip-sub {
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgba(255, 255, 255, .18);
+    font-size: 11.5px;
+    opacity: .82;
+    white-space: nowrap;
+}
+
+.chart-tip .tip-row {
+    display: grid;
+    grid-template-columns: 9px 1fr auto;
+    align-items: center;
+    gap: 0 8px;
+    white-space: nowrap;
+}
+
+.chart-tip .tip-row + .tip-row { margin-top: 2px; }
+
+.chart-tip .tip-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 2px;
+}
+
+.chart-tip .tip-val {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    padding-left: 10px;
+}
+
+/* --- the capacity bands ----------------------------------------------
+
+   Slots 1-6 of the same validated set the type chart uses, kept in size
+   order so a bar still reads small-to-large from the left, plus the same
+   neutral for "not recorded" that the other charts use for an absence.
+
+   Both modes validated against their own surface: lightness band, chroma
+   floor, protan/deutan separation and the normal-vision floor all pass
+   (the chroma FAIL is the grey, which is meant to be a grey). #1baf7a,
+   #eda100 and #e87ba4 come in under 3:1 on the light panel, which is why
+   every bar carries its count and the legend repeats every figure. */
+
+.kv-100  { background: #2a78d6; fill: #2a78d6; }
+.kv-160  { background: #eb6834; fill: #eb6834; }
+.kv-250  { background: #1baf7a; fill: #1baf7a; }
+.kv-400  { background: #eda100; fill: #eda100; }
+.kv-big  { background: #e87ba4; fill: #e87ba4; }
+.kv-odd  { background: #008300; fill: #008300; }
+.kv-none { background: #7b8592; fill: #7b8592; }
+
+[data-theme="dark"] .kv-100  { background: #3987e5; fill: #3987e5; }
+[data-theme="dark"] .kv-160  { background: #d95926; fill: #d95926; }
+[data-theme="dark"] .kv-250  { background: #199e70; fill: #199e70; }
+[data-theme="dark"] .kv-400  { background: #c98500; fill: #c98500; }
+[data-theme="dark"] .kv-big  { background: #d55181; fill: #d55181; }
+[data-theme="dark"] .kv-odd  { background: #008300; fill: #008300; }
+[data-theme="dark"] .kv-none { background: #68737f; fill: #68737f; }
+
+
+/* ---------------------------------------------------------------
+   Transformer T1 to T5 on the Add and Edit Event forms.
+
+   A round + sits just to the right of T1's box and opens the next
+   empty one, T2 to T5, which line up underneath T1 in the same
+   column. Each of those has a round x beside it to take it off.
+   The box keeps the width every other box on the form has; the
+   button sits after it rather than squeezing it.
+   --------------------------------------------------------------- */
+
+.tx-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tx-line select,
+.tx-line input[type="text"] {
+    flex: 0 1 auto;
+    min-width: 0;
+}
+
+.tx-icon-btn {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid #a9b3c0;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #17457c;
+    cursor: pointer;
+}
+
+.tx-icon-btn:hover,
+.tx-icon-btn:focus-visible {
+    border-color: #17457c;
+    background: #eaf1fa;
+}
+
+.tx-icon-add {
+    border-color: #17457c;
+    color: #17457c;
+}
+
+.extra-tx-remove {
+    color: #9a3226;
+}
+
+.extra-tx-remove:hover,
+.extra-tx-remove:focus-visible {
+    border-color: #9a3226;
+    background: #fbeceb;
+}
+
+.tx-icon-btn:disabled {
+    opacity: .4;
+    cursor: default;
+    background: none;
+}
+
+[data-theme="dark"] .tx-icon-btn {
+    background: rgba(5, 9, 14, 0.62);
+    border-color: rgba(255,255,255,.18);
+    color: #8fb8ee;
+}
+
+[data-theme="dark"] .tx-icon-add {
+    border-color: #5b9ceb;
+}
+
+[data-theme="dark"] .tx-icon-btn:hover,
+[data-theme="dark"] .tx-icon-btn:focus-visible {
+    border-color: #8fb8ee;
+    background: rgba(91, 156, 235, .15);
+}
+
+[data-theme="dark"] .extra-tx-remove {
+    color: #f09a8e;
+}
+
+[data-theme="dark"] .extra-tx-remove:hover,
+[data-theme="dark"] .extra-tx-remove:focus-visible {
+    border-color: #f09a8e;
+    background: rgba(240, 154, 142, .12);
+}
+
+
+/* ---------------------------------------------------------------
+   Edit History as a table.
+
+   One row per save. The whole row is the button: clicking it (or
+   Enter on it) opens the line underneath, which lists every field
+   that save changed and links to the full transformer or event.
+   The chevron in the Changes cell turns to show which are open.
+   --------------------------------------------------------------- */
+
+.hist-table .hist-row {
+    cursor: pointer;
+}
+
+.hist-table .hist-row:focus-visible {
+    outline: 2px solid #17457c;
+    outline-offset: -2px;
+}
+
+.hist-table .hist-row[aria-expanded="true"] td {
+    border-bottom-color: transparent;
+    font-weight: 600;
+}
+
+.hist-toggle {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 10px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(-45deg);
+    transition: transform .15s ease;
+    vertical-align: middle;
+    opacity: .6;
+}
+
+.hist-row[aria-expanded="true"] .hist-toggle {
+    transform: rotate(45deg);
+}
+
+.hist-table .hist-detail > td {
+    padding: 4px 16px 14px;
+    background: rgba(23, 69, 124, .04);
+}
+
+.hist-table .hist-detail:hover {
+    background: none;
+}
+
+.hist-table .hist-detail .hist-changes li {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.hist-open {
+    display: inline-block;
+    margin-top: 8px;
+    font-weight: 600;
+}
+
+[data-theme="dark"] .hist-table .hist-row:focus-visible { outline-color: #8fb8ee; }
+[data-theme="dark"] .hist-table .hist-detail > td { background: rgba(255,255,255,.04); }
+[data-theme="dark"] .hist-table .hist-detail:hover { background: none; }
+
+/* What a history row is about — "Event PL/26/0084", its date and how many
+   fields changed — heads the line that opens under it. */
+.hist-detail-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 14px;
+    margin: 6px 0 4px;
+    font-weight: 600;
+}
+
+.hist-detail-head .field-hint {
+    display: inline;
+    margin: 0;
+    font-weight: 400;
+}
+
+/* A row a filter has hidden stays hidden, whatever display a table layout
+   or a phone breakpoint gives its rows. Used by the Events live search. */
+tr[hidden] { display: none !important; }
+
+/* The Events page search box runs the whole heading, up to the title,
+   instead of stopping at 820px on the right. Asked for with
+   $pageSearch['wide'] = true. */
+.head-search.head-search-wide { max-width: none; }
+
+/* Load Reading — the feeder tables on Add / Edit Event. Four boxes and a
+   label across half the form, so the cells are packed a little closer than
+   an ordinary table's, and a box holding something that is not a valid
+   reading is outlined so it can be found before Save. */
+table.data.lr-feeders th,
+table.data.lr-feeders td { padding: 6px 6px; }
+
+table.data.lr-feeders input { min-width: 0; padding: 6px 6px; text-align: right; }
+
+.lr-cell[aria-invalid="true"],
+.lr-volt[aria-invalid="true"] {
+    border-color: #a3302a;
+    box-shadow: 0 0 0 1px #a3302a;
+}
+
+
+/* ---------------------------------------------------------------
+   38. Transformers by type, on the CSC page
+
+   The counts per CSC and type, and one CSC's transformers in a
+   panel beside the table — under it on anything narrower than a
+   wide desktop. Drawn by csc_breakdown.php.
+
+   The type colours are the validated slots the type bars in
+   section 37 use, in the same order, so Bulk is the same blue,
+   Distribution the same orange and Bulk & Distribution the same
+   teal here as on the dashboard. Slots 4-8 go to whatever other
+   types the register holds, in alphabetical order; Unspecified is
+   the grey that is not a category. Every count is written beside
+   its type's name — the colour only supports it.
+   --------------------------------------------------------------- */
+
+/* Display rules below would otherwise beat the hidden attribute. */
+.cscx [hidden] { display: none !important; }
+
+/* Fill for the ring, background for the bars, dots and tiles. */
+.txs-1    { background: #2a78d6; fill: #2a78d6; }
+.txs-2    { background: #eb6834; fill: #eb6834; }
+.txs-3    { background: #1baf7a; fill: #1baf7a; }
+.txs-4    { background: #eda100; fill: #eda100; }
+.txs-5    { background: #e87ba4; fill: #e87ba4; }
+.txs-6    { background: #008300; fill: #008300; }
+.txs-7    { background: #4a3aa7; fill: #4a3aa7; }
+.txs-8    { background: #e34948; fill: #e34948; }
+.txs-none { background: #7b8592; fill: #7b8592; }
+
+.cscx-tiles { margin-bottom: 18px; }
+
+.cscx-tile .stat-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.cscx-tile .legend-dot { flex: 0 0 auto; }
+
+/* One column until the screen is wide enough to give the panel its own. */
+.cscx-layout { display: block; }
+.cscx-main   { min-width: 0; }
+
+/* The tables scroll inside themselves on a narrow screen; the page never
+   does. (.table-wrap is overflow: visible since section 20, so this is
+   its own wrapper.) */
+.cscx-scroll {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.cscx-table thead th { vertical-align: bottom; }
+
+/* Type names are the column headings, and "Bulk & Distribution" is long,
+   so they wrap rather than widen the column. */
+.cscx-table th.cscx-col-type {
+    white-space: normal;
+    min-width: 4.6em;
+    line-height: 1.25;
+}
+
+.cscx-table th .legend-dot {
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: -1px;
+}
+
+.cscx-col-bar { width: 30%; min-width: 140px; }
+
+/* The split bar is the last column here, and section 4 pins every table's
+   last column to the right edge on narrower screens — right for an Action
+   column, wrong for a bar. This table has few enough columns not to need
+   it. Same specificity as those rules, and later, so these win. */
+table.cscx-table th:last-child,
+table.cscx-table td:last-child,
+[data-theme="dark"] table.cscx-table th:last-child,
+[data-theme="dark"] table.cscx-table td:last-child {
+    position: static;
+    background: transparent;
+    box-shadow: none;
+}
+
+/* The area sits under the CSC's name instead of in a column of its own. */
+.cscx-area {
+    display: block;
+    margin-top: 1px;
+    font-size: 12px;
+    color: #616c79;
+}
+
+/* The heading over the tiles; the table below has its own panel head. */
+.cscx-title {
+    margin: 4px 0 12px 0;
+    font-size: 18px;
+    color: #14243a;
+}
+
+.cscx-table tbody tr[data-csc] { cursor: pointer; }
+
+.cscx-total { font-weight: 700; }
+.cscx-zero  { color: #9aa3ae; }
+
+/* The CSC's name is a real button, so a keyboard can open it too. */
+.cscx-open {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #17457c;
+    font: inherit;
+    font-weight: 600;
+    text-align: left;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+}
+
+.cscx-open:focus-visible {
+    outline: 2px solid #17457c;
+    outline-offset: 2px;
+}
+
+/* "No CSC assigned" and a deleted CSC are not ordinary CSCs. */
+.cscx-odd-row .cscx-open { font-style: italic; }
+
+table.cscx-table tbody tr.is-selected,
+table.cscx-table tbody tr.is-selected:nth-child(even),
+table.cscx-table tbody tr.is-selected:hover {
+    background: rgba(42, 120, 214, .14);
+    box-shadow: inset 4px 0 0 0 #1a4d80;
+}
+
+table.cscx-table tfoot td {
+    font-weight: 700;
+    color: #14243a;
+}
+
+.cscx-retry { margin-left: 10px; vertical-align: middle; }
+
+/* ---- the details panel ---- */
+
+.cscx-detail {
+    min-width: 0;
+    margin-top: 20px;
+    padding: 16px 18px 18px 18px;
+    border: 1px solid rgba(11, 11, 11, .12);
+    border-top: 3px solid #1a4d80;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, .70);
+}
+
+.cscx-detail-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.cscx-detail-title { min-width: 0; }
+
+.cscx-detail-head h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #14243a;
+    overflow-wrap: anywhere;
+}
+
+.cscx-detail-head h3:focus { outline: none; }
+
+.cscx-detail-sub {
+    margin: 3px 0 0 0;
+    font-size: 13px;
+    color: #55606d;
+}
+
+.cscx-donut .donut-svg    { width: 150px; height: 150px; }
+.cscx-donut .donut-legend { flex-basis: 170px; }
+
+.cscx-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 16px 0 12px 0;
+    padding-top: 14px;
+    border-top: 1px solid rgba(11, 11, 11, .10);
+}
+
+.cscx-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border: 1px solid #a9b3c0;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #22303f;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.cscx-tab .legend-dot { flex: 0 0 auto; }
+
+.cscx-tab:hover { border-color: #17457c; }
+
+.cscx-tab[aria-selected="true"] {
+    background: #1a4d80;
+    border-color: #1a4d80;
+    color: #ffffff;
+}
+
+/* A ring round the dot, so it still reads on the dark selected pill. */
+.cscx-tab[aria-selected="true"] .legend-dot { box-shadow: 0 0 0 1.5px #ffffff; }
+
+.cscx-tab:focus-visible {
+    outline: 2px solid #17457c;
+    outline-offset: 2px;
+}
+
+.cscx-list-tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+    margin-bottom: 10px;
+}
+
+.cscx-list-tools input[type="search"] {
+    flex: 1 1 200px;
+    max-width: 320px;
+    margin: 0;
+}
+
+.cscx-list-count {
+    font-size: 13px;
+    color: #55606d;
+    font-variant-numeric: tabular-nums;
+}
+
+.cscx-serial { font-weight: 400; letter-spacing: .02em; }
+
+.cscx-pager {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #55606d;
+}
+
+/* Wide desktop: the panel stands beside the table and stays in view
+   while the table scrolls past it. */
+@media (min-width: 1400px) {
+    .cscx-layout.is-open {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(360px, 34%);
+        gap: 20px;
+        align-items: start;
+    }
+
+    .cscx-layout.is-open .cscx-detail {
+        margin-top: 0;
+        position: sticky;
+        top: 16px;
+        max-height: calc(100vh - 32px);
+        overflow-y: auto;
+    }
+}
+
+@media (max-width: 640px) {
+    .cscx-detail { padding: 14px 12px 14px 12px; }
+    .cscx-donut .donut-svg { width: 130px; height: 130px; }
+    .cscx-col-bar { min-width: 90px; }
+}
+
+/* --- dark --- */
+
+[data-theme="dark"] .txs-1    { background: #3987e5; fill: #3987e5; }
+[data-theme="dark"] .txs-2    { background: #d95926; fill: #d95926; }
+[data-theme="dark"] .txs-3    { background: #199e70; fill: #199e70; }
+[data-theme="dark"] .txs-4    { background: #c98500; fill: #c98500; }
+[data-theme="dark"] .txs-5    { background: #d55181; fill: #d55181; }
+[data-theme="dark"] .txs-6    { background: #008300; fill: #008300; }
+[data-theme="dark"] .txs-7    { background: #9085e9; fill: #9085e9; }
+[data-theme="dark"] .txs-8    { background: #e66767; fill: #e66767; }
+[data-theme="dark"] .txs-none { background: #68737f; fill: #68737f; }
+
+[data-theme="dark"] .cscx-open { color: #8ab8f5; }
+[data-theme="dark"] .cscx-area { color: #9fb0cc; }
+[data-theme="dark"] .cscx-title { color: #eaf1fb; }
+[data-theme="dark"] .cscx-zero { color: #6b7789; }
+
+[data-theme="dark"] table.cscx-table tbody tr.is-selected,
+[data-theme="dark"] table.cscx-table tbody tr.is-selected:nth-child(even),
+[data-theme="dark"] table.cscx-table tbody tr.is-selected:hover {
+    background: rgba(57, 135, 229, .20);
+    box-shadow: inset 4px 0 0 0 #7fb6ff;
+}
+
+[data-theme="dark"] table.cscx-table tfoot td {
+    color: #eaf1fb;
+    background: rgba(255, 255, 255, .05);
+    border-top-color: rgba(255, 255, 255, .14);
+}
+
+[data-theme="dark"] .cscx-detail {
+    background: rgba(255, 255, 255, .04);
+    border-color: rgba(255, 255, 255, .10);
+    border-top-color: #7f9dd8;
+}
+
+[data-theme="dark"] .cscx-detail-head h3 { color: #eaf1fb; }
+
+[data-theme="dark"] .cscx-detail-sub,
+[data-theme="dark"] .cscx-list-count,
+[data-theme="dark"] .cscx-pager { color: #9fb0cc; }
+
+[data-theme="dark"] .cscx-tabs { border-top-color: rgba(255, 255, 255, .10); }
+
+[data-theme="dark"] .cscx-tab {
+    background: rgba(255, 255, 255, .06);
+    border-color: rgba(255, 255, 255, .18);
+    color: #cfdcea;
+}
+
+[data-theme="dark"] .cscx-tab:hover { border-color: #8fb8ee; }
+
+[data-theme="dark"] .cscx-tab[aria-selected="true"] {
+    background: #3987e5;
+    border-color: #3987e5;
+    color: #06101d;
+}
+
+[data-theme="dark"] .cscx-tab[aria-selected="true"] .legend-dot { box-shadow: 0 0 0 1.5px #06101d; }
+
+[data-theme="dark"] .cscx-open:focus-visible,
+[data-theme="dark"] .cscx-tab:focus-visible { outline-color: #7fb6ff; }
